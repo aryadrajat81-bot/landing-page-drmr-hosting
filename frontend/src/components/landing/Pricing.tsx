@@ -81,7 +81,7 @@ export const Pricing = () => (
     />
     <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
       <Reveal className="text-center">
-        <p className="font-mono text-xs tracking-[0.3em] text-emerald-300">// PRICING SERVER</p>
+        <p className="font-mono text-xs tracking-[0.3em] text-emerald-300">Butuh Resource Lebih?</p>
         <h2 className="mx-auto mt-4 max-w-2xl font-heading text-2xl font-bold tracking-tight text-white sm:text-3xl lg:text-4xl">
           Mulai dari <span className="text-dream">Rp40.000</span> — scale sampai 12GB.
         </h2>
@@ -114,8 +114,8 @@ export const Pricing = () => (
           </div>
           <div className="mt-5 grid gap-4 border-t border-emerald-400/15 pt-4 sm:grid-cols-2" data-testid="free-tier-slots">
             {[
-              { code: "SG", label: "Singapore", left: 7, total: 50 },
-              { code: "ID", label: "Indonesia", left: 12, total: 50 },
+              { code: "SG", label: "Singapore", left: 7, total: 12 },
+              { code: "ID", label: "Indonesia", left: 3, total: 8 },
             ].map((s) => (
               <div key={s.code} data-testid={`free-tier-slot-${s.code.toLowerCase()}`}>
                 <div className="mb-1.5 flex items-center justify-between font-mono text-[11px]">

@@ -8,7 +8,6 @@ const LINKS = [
   { label: "Keunggulan", href: "#keunggulan", testid: "nav-features-link" },
   { label: "Region", href: "#region", testid: "nav-region-link" },
   { label: "Modpacks", href: "#modpacks", testid: "nav-modpacks-link" },
-  { label: "FAQ", href: "#faq", testid: "nav-faq-link" },
 ];
 
 export const Navbar = () => (

@@ -18,7 +18,7 @@ const REGIONS = [
     id: "indonesia",
     code: "ID",
     name: "Indonesia",
-    detail: "Jakarta · Local Edge Node",
+    detail: "DCI JKT1 - Local Edge Node",
     ping: "~3ms",
     min: 2,
     max: 7,

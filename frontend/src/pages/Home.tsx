@@ -7,7 +7,6 @@ import { Features } from "@/components/landing/Features";
 import { Regions } from "@/components/landing/Regions";
 import { Pricing } from "@/components/landing/Pricing";
 import { Software } from "@/components/landing/Software";
-import { Faq } from "@/components/landing/Faq";
 import { Footer } from "@/components/landing/Footer";
 
 export default function Home() {
@@ -35,7 +34,6 @@ export default function Home() {
         <Regions />
         <Pricing />
         <Software />
-        <Faq />
       </main>
       <Footer />
     </div>
