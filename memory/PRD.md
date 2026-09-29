@@ -1,0 +1,40 @@
+# PRD — Dreamer Host Landing Page
+
+## Original Problem Statement
+Landing page "Dreamer Host" — Free Minecraft Hosting dengan tema Minecraft + Liquid Glass ala macOS/iOS. Hero dengan background upload user, headline "Free Minecraft Hosting - Forever*", subline "Untuk Resource 3GB Ram, 20GB Storage dan 1.5vCore", direct button ke https://dash.drmr.my.id, pricing mulai 4GB/30GB/2vCore @ Rp40.000 kelipatan sampai 12GB, keunggulan (DDR4 ECC, AMD EPYC, 5Gbps Unmetered, NVMe), sisanya bebas.
+
+## User Choices (dari ask_human)
+- Pricing naik per 2GB: 4 / 6 / 8 / 10 / 12GB
+- Bahasa campuran (Indonesia + istilah teknis English)
+- Section: hanya yang diminta, sisanya keputusan agent
+- Koreksi copy: "Forever*" (bukan "For Ever")
+
+## User Personas
+- Pemain Minecraft Indonesia (pelajar/komunitas) yang cari server gratis/murah
+- Owner SMP/community server yang butuh performa stabil dengan budget terbatas
+
+## Core Requirements (static)
+1. Hero: bg artwork Minecraft upload user, headline "Free Minecraft Hosting - Forever*", subline resource free tier, CTA ke dash.drmr.my.id
+2. Pricing 5 tier per 2GB: 4GB Rp40.000 → 12GB Rp120.000
+3. Keunggulan: DDR4 ECC, AMD EPYC, 5Gbps Unmetered, NVMe
+4. Tema: Minecraft x Liquid Glass (glassmorphism gelap, emerald/cyan)
+5. Semua CTA order mengarah ke https://dash.drmr.my.id
+
+## Implemented (2026-09-29)
+- Landing page lengkap: glass navbar, hero (masked line-by-line reveal, parallax bg, glass server terminal mockup), marquee ribbon, bento keunggulan (4 kartu + animated meter), free tier banner + 5 pricing tier (8GB = Paling Populer), 1-click installer chips (Paper/Purpur/Fabric/dst), FAQ accordion, footer editorial
+- Logo SVG original (pixel cloud + diamond cube) dipakai sebagai favicon
+- Lenis smooth scroll + motion/react scroll reveals, micro-interactions, noise grain overlay
+- Fonts: Space Grotesk (heading), DM Sans (body), JetBrains Mono (specs)
+- data-testid di semua elemen interaktif
+- Backend template tidak diubah (hanya /api/status); landing page fully static frontend
+
+## Verification
+- `yarn typecheck` clean
+- POST+GET /api/status via public URL OK
+- Screenshot e2e: hero, pricing, FAQ/footer terverifikasi visual
+
+## Backlog / Next
+- P1: Live server status nyata (query node Minecraft asli)
+- P1: Kalkulator RAM slider interaktif (harga live)
+- P2: Ping/latency checker real-time per region
+- P2: Halaman detail per paket / blog SEO
