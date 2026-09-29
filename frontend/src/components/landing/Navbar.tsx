@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
+import { SiDiscord } from "@icons-pack/react-simple-icons";
 import { Logo } from "./Logo";
 
 const LINKS = [
@@ -34,16 +35,28 @@ export const Navbar = () => (
           </a>
         ))}
       </nav>
-      <a
-        href="https://dash.drmr.my.id"
-        target="_blank"
-        rel="noreferrer"
-        data-testid="nav-dashboard-link"
-        className="group inline-flex items-center gap-1.5 rounded-full bg-emerald-400 px-4 py-2 text-sm font-semibold text-emerald-950 transition-colors duration-200 hover:bg-emerald-300"
-      >
-        Dashboard
-        <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-      </a>
+      <div className="flex items-center gap-2.5">
+        <a
+          href="https://discord.gg/Qw4hDryZS2"
+          target="_blank"
+          rel="noreferrer"
+          data-testid="nav-discord-button"
+          aria-label="Join Discord Dreamer Host"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition-colors duration-200 hover:border-indigo-400/40 hover:text-indigo-300"
+        >
+          <SiDiscord size={15} />
+        </a>
+        <a
+          href="https://dash.drmr.my.id"
+          target="_blank"
+          rel="noreferrer"
+          data-testid="nav-dashboard-link"
+          className="group inline-flex items-center gap-1.5 rounded-full bg-emerald-400 px-4 py-2 text-sm font-semibold text-emerald-950 transition-colors duration-200 hover:bg-emerald-300"
+        >
+          Dashboard
+          <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </a>
+      </div>
     </div>
   </motion.header>
 );
