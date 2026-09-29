@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import { Check, Flame, ArrowUpRight, Gem } from "lucide-react";
 import { Reveal } from "./Reveal";
 
@@ -90,25 +91,49 @@ export const Pricing = () => (
       </Reveal>
 
       <Reveal delay={0.1}>
-        <div className="mx-auto mt-10 flex max-w-3xl flex-col items-center justify-between gap-4 rounded-2xl border border-emerald-400/25 bg-emerald-950/40 p-5 backdrop-blur-xl sm:flex-row sm:px-7" data-testid="free-tier-banner">
-          <div className="flex items-center gap-3.5">
-            <span className="glass inline-flex h-11 w-11 items-center justify-center rounded-xl">
-              <Gem className="h-5 w-5 text-emerald-300" />
-            </span>
-            <div>
-              <p className="font-heading font-bold text-emerald-50">Free Tier — Rp0 Selamanya*</p>
-              <p className="text-sm text-emerald-200/70">3GB RAM · 20GB Storage · 1.5 vCore</p>
+        <div className="mx-auto mt-10 max-w-3xl rounded-2xl border border-emerald-400/25 bg-emerald-950/40 p-5 backdrop-blur-xl sm:px-7" data-testid="free-tier-banner">
+          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <div className="flex items-center gap-3.5">
+              <span className="glass inline-flex h-11 w-11 items-center justify-center rounded-xl">
+                <Gem className="h-5 w-5 text-emerald-300" />
+              </span>
+              <div>
+                <p className="font-heading font-bold text-emerald-50">Free Tier — Rp0 Selamanya*</p>
+                <p className="text-sm text-emerald-200/70">3GB RAM · 20GB Storage · 1.5 vCore</p>
+              </div>
             </div>
+            <a
+              href="https://dash.drmr.my.id"
+              target="_blank"
+              rel="noreferrer"
+              data-testid="free-tier-cta-button"
+              className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400 px-5 py-2.5 text-sm font-bold text-emerald-950 transition-colors hover:bg-emerald-300"
+            >
+              Ambil Gratis <ArrowUpRight className="h-4 w-4" />
+            </a>
           </div>
-          <a
-            href="https://dash.drmr.my.id"
-            target="_blank"
-            rel="noreferrer"
-            data-testid="free-tier-cta-button"
-            className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400 px-5 py-2.5 text-sm font-bold text-emerald-950 transition-colors hover:bg-emerald-300"
-          >
-            Ambil Gratis <ArrowUpRight className="h-4 w-4" />
-          </a>
+          <div className="mt-5 grid gap-4 border-t border-emerald-400/15 pt-4 sm:grid-cols-2" data-testid="free-tier-slots">
+            {[
+              { code: "SG", label: "Singapore", left: 7, total: 50 },
+              { code: "ID", label: "Indonesia", left: 12, total: 50 },
+            ].map((s) => (
+              <div key={s.code} data-testid={`free-tier-slot-${s.code.toLowerCase()}`}>
+                <div className="mb-1.5 flex items-center justify-between font-mono text-[11px]">
+                  <span className="text-emerald-200/80">{s.code} · {s.label}</span>
+                  <span className="font-bold text-amber-300">Sisa {s.left}/{s.total} slot</span>
+                </div>
+                <div className="h-1.5 overflow-hidden rounded-full bg-emerald-950/80">
+                  <motion.div
+                    className="h-full rounded-full bg-gradient-to-r from-amber-400 to-red-400"
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${(s.left / s.total) * 100}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1.1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </Reveal>
 

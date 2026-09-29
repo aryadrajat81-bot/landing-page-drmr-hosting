@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowRight, Gauge, MemoryStick, HardDrive, Cpu } from "lucide-react";
 
@@ -17,7 +17,18 @@ const MaskedLine = ({ children, delay }: { children: React.ReactNode; delay: num
   </span>
 );
 
-const ServerTerminal = () => (
+const HERO_REGIONS = [
+  { code: "SG", label: "Singapore", ping: "~8ms" },
+  { code: "ID", label: "Indonesia", ping: "~3ms" },
+] as const;
+
+type HeroRegionCode = (typeof HERO_REGIONS)[number]["code"];
+
+const ServerTerminal = () => {
+  const [region, setRegion] = useState<HeroRegionCode>("SG");
+  const activeRegion = HERO_REGIONS.find((r) => r.code === region) ?? HERO_REGIONS[0];
+
+  return (
   <motion.div
     initial={{ opacity: 0, y: 40, rotate: 1.5 }}
     animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -25,18 +36,35 @@ const ServerTerminal = () => (
     className="glass-deep w-full max-w-md rounded-2xl p-5"
     data-testid="hero-server-terminal"
   >
-    <div className="mb-4 flex items-center justify-between">
+    <div className="mb-4 flex items-center justify-between gap-2">
       <div className="flex items-center gap-1.5">
         <span className="h-3 w-3 rounded-full bg-red-400/80" />
         <span className="h-3 w-3 rounded-full bg-amber-400/80" />
         <span className="h-3 w-3 rounded-full bg-emerald-400/80" />
       </div>
-      <span className="font-mono text-xs text-slate-400">dreamer-node-01 · SG</span>
+      <div className="flex items-center gap-1 rounded-full border border-white/10 bg-black/30 p-0.5" data-testid="hero-region-switcher">
+        {HERO_REGIONS.map((r) => (
+          <button
+            key={r.code}
+            type="button"
+            data-testid={`hero-region-${r.code.toLowerCase()}`}
+            onClick={() => setRegion(r.code)}
+            className={`rounded-full px-2.5 py-1 font-mono text-[10px] font-bold transition-colors duration-200 ${
+              region === r.code ? "bg-emerald-400 text-emerald-950" : "text-slate-400 hover:text-white"
+            }`}
+          >
+            {r.code}
+          </button>
+        ))}
+      </div>
       <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/10 px-2.5 py-1 font-mono text-[11px] text-emerald-300">
         <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
         ONLINE
       </span>
     </div>
+    <p className="mb-3 font-mono text-[11px] text-slate-500" data-testid="hero-region-label">
+      dreamer-node-01 · {activeRegion.label} · {activeRegion.ping} ping
+    </p>
 
     <div className="space-y-3 font-mono text-xs">
       <div>
@@ -73,7 +101,7 @@ const ServerTerminal = () => (
       {[
         ["[Server]", "Done (2.41s)! World \"world\" loaded", "text-emerald-300"],
         ["[Dreamer]", "Auto-backup completed — 0 errors", "text-cyan-300"],
-        ["[Net]", "DDoS shield active · 5Gbps uplink", "text-slate-400"],
+        ["[Net]", `DDoS shield active · ${activeRegion.code} uplink 5Gbps`, "text-slate-400"],
       ].map(([tag, msg, color], i) => (
         <motion.p
           key={msg}
@@ -90,7 +118,8 @@ const ServerTerminal = () => (
       </p>
     </div>
   </motion.div>
-);
+  );
+};
 
 export const Hero = () => {
   const ref = useRef<HTMLElement>(null);

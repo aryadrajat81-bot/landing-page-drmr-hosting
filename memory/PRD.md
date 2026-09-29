@@ -28,6 +28,7 @@ Landing page "Dreamer Host" — Free Minecraft Hosting dengan tema Minecraft + L
 - data-testid di semua elemen interaktif
 - Backend template tidak diubah (hanya /api/status); landing page fully static frontend
 - (2026-09-29) Section "Lokasi Server": 2 region glass card — Singapore (Equinix SG1, ~8ms) & Indonesia (Jakarta Local Edge, ~3ms) + nav link "Region"
+- (2026-09-29) Logo diganti foto upload user (public/logo.png, rounded-xl) di navbar/footer + favicon; hero terminal punya region switcher interaktif SG/ID (label node & ping ikut berubah); banner Free Tier menampilkan sisa slot per region (SG 7/50, ID 12/50 — angka MOCKED statis)
 
 ## Verification
 - `yarn typecheck` clean
