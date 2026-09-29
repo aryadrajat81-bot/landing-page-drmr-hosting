@@ -8,9 +8,8 @@ const REGIONS = [
     code: "SG",
     name: "Singapore",
     detail: "Equinix SG1 · Asia Pacific Hub",
+    host: "node1.drmr.my.id",
     ping: "~8ms",
-    min: 7,
-    max: 16,
     note: "Latency rendah untuk pemain SEA & Oceania",
     testid: "region-card-singapore",
   },
@@ -19,13 +18,14 @@ const REGIONS = [
     code: "ID",
     name: "Indonesia",
     detail: "DCI JKT1 - Local Edge Node",
+    host: "node3.drmr.my.id",
     ping: "~3ms",
-    min: 2,
-    max: 7,
     note: "Ping tercepat untuk pemain lokal Indonesia",
     testid: "region-card-indonesia",
   },
 ];
+
+const PING_TIMEOUT_MS = 5000;
 
 interface PingState {
   phase: "idle" | "testing" | "done";
@@ -33,28 +33,40 @@ interface PingState {
   result: number | null;
 }
 
+// Browser tidak bisa ICMP ping — ini mengukur RTT koneksi HTTPS nyata ke node.
+const probeHost = async (host: string): Promise<number> => {
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), PING_TIMEOUT_MS);
+  const start = performance.now();
+  try {
+    await fetch(`https://${host}/?ping=${Date.now()}`, {
+      mode: "no-cors",
+      cache: "no-store",
+      signal: controller.signal,
+    });
+  } catch {
+    // Connection refused/reset tetap berarti node menjawab — waktu pulang-pergi itulah latensinya.
+  } finally {
+    window.clearTimeout(timer);
+  }
+  return Math.round(performance.now() - start);
+};
+
 export const Regions = () => {
   const [pings, setPings] = useState<Record<string, PingState>>({});
 
-  const runPing = (regionId: string, min: number, max: number) => {
+  const runPing = async (regionId: string, host: string) => {
     setPings((p) => ({ ...p, [regionId]: { phase: "testing", probes: [], result: null } }));
-    let step = 0;
-    const iv = window.setInterval(() => {
-      step += 1;
-      const value = Math.round(min + Math.random() * (max - min));
-      if (step >= 5) {
-        window.clearInterval(iv);
-        setPings((p) => {
-          const all = [...(p[regionId]?.probes ?? []), value];
-          return { ...p, [regionId]: { phase: "done", probes: all, result: Math.min(...all) } };
-        });
-      } else {
-        setPings((p) => ({
-          ...p,
-          [regionId]: { phase: "testing", probes: [...(p[regionId]?.probes ?? []), value], result: null },
-        }));
-      }
-    }, 340);
+    const probes: number[] = [];
+    for (let i = 0; i < 5; i += 1) {
+      const ms = await probeHost(host);
+      probes.push(ms);
+      const done = probes.length === 5;
+      setPings((p) => ({
+        ...p,
+        [regionId]: { phase: done ? "done" : "testing", probes: [...probes], result: done ? Math.min(...probes) : null },
+      }));
+    }
   };
 
   return (
@@ -90,26 +102,31 @@ export const Regions = () => {
                   <h3 className="font-heading text-xl font-semibold text-white">{r.name}</h3>
                 </div>
                 <p className="mt-1.5 font-mono text-xs text-slate-500">{r.detail}</p>
+                <p className="mt-1 font-mono text-[10px] text-slate-600">{r.host}</p>
                 <div className="mt-5 flex items-center justify-between rounded-xl bg-black/30 px-4 py-3">
                   <span className="inline-flex items-center gap-2 text-sm text-slate-300">
                     <Signal className="h-4 w-4 text-emerald-300" />
                     {r.note}
                   </span>
                   <span className="font-mono text-sm font-bold text-dream" data-testid={`ping-result-${r.id}`}>
-                    {state?.phase === "done" && state.result !== null ? `${state.result}ms` : r.ping}
+                    {state?.phase === "done" && state.result !== null
+                      ? state.result >= PING_TIMEOUT_MS
+                        ? "timeout"
+                        : `${state.result}ms`
+                      : r.ping}
                   </span>
                 </div>
                 <button
                   type="button"
                   data-testid={`ping-test-${r.id}`}
-                  onClick={() => runPing(r.id, r.min, r.max)}
+                  onClick={() => runPing(r.id, r.host)}
                   disabled={testing}
                   className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:border-emerald-400/40 hover:bg-emerald-400/10 disabled:cursor-wait disabled:opacity-70"
                 >
                   {testing ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin text-emerald-300" />
-                      Pinging node {r.code}...
+                      Pinging {r.host}...
                     </>
                   ) : state?.phase === "done" ? (
                     <>
