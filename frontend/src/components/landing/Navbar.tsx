@@ -5,6 +5,7 @@ import { Logo } from "./Logo";
 const LINKS = [
   { label: "Pricing", href: "#pricing", testid: "nav-pricing-link" },
   { label: "Keunggulan", href: "#keunggulan", testid: "nav-features-link" },
+  { label: "Region", href: "#region", testid: "nav-region-link" },
   { label: "Modpacks", href: "#modpacks", testid: "nav-modpacks-link" },
   { label: "FAQ", href: "#faq", testid: "nav-faq-link" },
 ];

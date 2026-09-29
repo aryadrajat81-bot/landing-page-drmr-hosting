@@ -4,6 +4,7 @@ import { Navbar } from "@/components/landing/Navbar";
 import { Hero } from "@/components/landing/Hero";
 import { Marquee } from "@/components/landing/Marquee";
 import { Features } from "@/components/landing/Features";
+import { Regions } from "@/components/landing/Regions";
 import { Pricing } from "@/components/landing/Pricing";
 import { Software } from "@/components/landing/Software";
 import { Faq } from "@/components/landing/Faq";
@@ -31,6 +32,7 @@ export default function Home() {
         <Hero />
         <Marquee />
         <Features />
+        <Regions />
         <Pricing />
         <Software />
         <Faq />

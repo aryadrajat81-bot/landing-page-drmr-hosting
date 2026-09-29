@@ -27,6 +27,7 @@ Landing page "Dreamer Host" — Free Minecraft Hosting dengan tema Minecraft + L
 - Fonts: Space Grotesk (heading), DM Sans (body), JetBrains Mono (specs)
 - data-testid di semua elemen interaktif
 - Backend template tidak diubah (hanya /api/status); landing page fully static frontend
+- (2026-09-29) Section "Lokasi Server": 2 region glass card — Singapore (Equinix SG1, ~8ms) & Indonesia (Jakarta Local Edge, ~3ms) + nav link "Region"
 
 ## Verification
 - `yarn typecheck` clean
