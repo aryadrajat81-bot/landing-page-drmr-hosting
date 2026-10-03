@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
+import { LangProvider } from "@/components/landing/lang";
 import { Navbar } from "@/components/landing/Navbar";
 import { Hero } from "@/components/landing/Hero";
 import { Marquee } from "@/components/landing/Marquee";
@@ -25,17 +26,19 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="noise min-h-screen bg-[#0B0F17] font-sans text-slate-100" data-testid="landing-page">
-      <Navbar />
-      <main>
-        <Hero />
-        <Marquee />
-        <Features />
-        <Regions />
-        <Pricing />
-        <Software />
-      </main>
-      <Footer />
-    </div>
+    <LangProvider>
+      <div className="noise min-h-screen bg-[#0B0F17] font-sans text-slate-100" data-testid="landing-page">
+        <Navbar />
+        <main>
+          <Hero />
+          <Marquee />
+          <Features />
+          <Regions />
+          <Pricing />
+          <Software />
+        </main>
+        <Footer />
+      </div>
+    </LangProvider>
   );
 }

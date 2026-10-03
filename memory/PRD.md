@@ -32,6 +32,7 @@ Landing page "Dreamer Host" — Free Minecraft Hosting dengan tema Minecraft + L
 - (2026-09-29) Ping checker interaktif per region kartu (5 probes beranimasi, hasil min ms — nilai SIMULATED, bukan pengukuran jaringan asli); tombol Discord (https://discord.gg/Qw4hDryZS2) di navbar + footer; badge uptime footer jadi link ke HetrixTools monitor
 - (2026-09-29) FAQ section dihapus total (section + nav link); region Indonesia jadi "DCI JKT1 - Local Edge Node"; total slot diubah SG 7/12 & ID 3/8 (MOCKED); heading pricing "// PRICING SERVER" → "Butuh Resource Lebih?"
 - (2026-09-29) Ping checker kini PENGUKURAN ASLI: 5 probe HTTPS RTT dari browser pengunjung ke node1.drmr.my.id (SG) & node3.drmr.my.id (JKT), hasil = min probe, timeout 5s; hostname node ditampilkan di kartu region
+- (2026-10-03) Bilingual EN/ID: English = bahasa utama (default), toggle EN|ID pill di navbar; semua copy (hero, features, regions, pricing, software, footer) punya varian dua bahasa via LangProvider context (components/landing/lang.tsx)
 
 ## Verification
 - `yarn typecheck` clean

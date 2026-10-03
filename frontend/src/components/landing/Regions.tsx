@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { MapPin, Signal, Activity, Loader2, RotateCcw } from "lucide-react";
 import { Reveal } from "./Reveal";
+import { useLang } from "./lang";
+import type { Lang } from "./lang";
 
 const REGIONS = [
   {
@@ -10,7 +12,6 @@ const REGIONS = [
     detail: "Equinix SG1 · Asia Pacific Hub",
     host: "node1.drmr.my.id",
     ping: "~8ms",
-    note: "Latency rendah untuk pemain SEA & Oceania",
     testid: "region-card-singapore",
   },
   {
@@ -20,7 +21,6 @@ const REGIONS = [
     detail: "DCI JKT1 - Local Edge Node",
     host: "node3.drmr.my.id",
     ping: "~3ms",
-    note: "Ping tercepat untuk pemain lokal Indonesia",
     testid: "region-card-indonesia",
   },
 ];
@@ -32,6 +32,46 @@ interface PingState {
   probes: number[];
   result: number | null;
 }
+
+interface RegionCopy {
+  label: string;
+  headingTop: string;
+  headingAccent: string;
+  desc: string;
+  notes: Record<string, string>;
+  test: string;
+  pinging: string;
+  again: string;
+}
+
+const COPY: Record<Lang, RegionCopy> = {
+  en: {
+    label: "// SERVER LOCATIONS",
+    headingTop: "2 regions available,",
+    headingAccent: "pick the closest.",
+    desc: "Deploy your server in Singapore or Indonesia — switch regions anytime for free from the dashboard.",
+    notes: {
+      singapore: "Low latency for SEA & Oceania players",
+      indonesia: "Fastest ping for local Indonesian players",
+    },
+    test: "Test Ping Live",
+    pinging: "Pinging",
+    again: "Test Again",
+  },
+  id: {
+    label: "// LOKASI SERVER",
+    headingTop: "2 region tersedia,",
+    headingAccent: "pilih yang terdekat.",
+    desc: "Deploy server kamu di Singapore atau Indonesia — gratis pindah region kapan saja lewat dashboard.",
+    notes: {
+      singapore: "Latency rendah untuk pemain SEA & Oceania",
+      indonesia: "Ping tercepat untuk pemain lokal Indonesia",
+    },
+    test: "Test Ping Live",
+    pinging: "Pinging",
+    again: "Test Ulang",
+  },
+};
 
 // Browser tidak bisa ICMP ping — ini mengukur RTT koneksi HTTPS nyata ke node.
 const probeHost = async (host: string): Promise<number> => {
@@ -54,6 +94,8 @@ const probeHost = async (host: string): Promise<number> => {
 
 export const Regions = () => {
   const [pings, setPings] = useState<Record<string, PingState>>({});
+  const { lang } = useLang();
+  const copy = COPY[lang];
 
   const runPing = async (regionId: string, host: string) => {
     setPings((p) => ({ ...p, [regionId]: { phase: "testing", probes: [], result: null } }));
@@ -72,13 +114,11 @@ export const Regions = () => {
   return (
     <section id="region" className="mx-auto max-w-7xl px-5 pb-24 sm:px-8" data-testid="regions-section">
       <Reveal className="text-center">
-        <p className="font-mono text-xs tracking-[0.3em] text-emerald-300">// LOKASI SERVER</p>
+        <p className="font-mono text-xs tracking-[0.3em] text-emerald-300">{copy.label}</p>
         <h2 className="mx-auto mt-4 max-w-xl font-heading text-2xl font-bold tracking-tight text-white sm:text-3xl">
-          2 region tersedia, <span className="text-dream">pilih yang terdekat.</span>
+          {copy.headingTop} <span className="text-dream">{copy.headingAccent}</span>
         </h2>
-        <p className="mx-auto mt-4 max-w-lg text-sm text-slate-400 sm:text-base">
-          Deploy server kamu di Singapore atau Indonesia — gratis pindah region kapan saja lewat dashboard.
-        </p>
+        <p className="mx-auto mt-4 max-w-lg text-sm text-slate-400 sm:text-base">{copy.desc}</p>
       </Reveal>
 
       <div className="mx-auto mt-12 grid max-w-3xl gap-5 sm:grid-cols-2">
@@ -106,7 +146,7 @@ export const Regions = () => {
                 <div className="mt-5 flex items-center justify-between rounded-xl bg-black/30 px-4 py-3">
                   <span className="inline-flex items-center gap-2 text-sm text-slate-300">
                     <Signal className="h-4 w-4 text-emerald-300" />
-                    {r.note}
+                    {copy.notes[r.id]}
                   </span>
                   <span className="font-mono text-sm font-bold text-dream" data-testid={`ping-result-${r.id}`}>
                     {state?.phase === "done" && state.result !== null
@@ -126,17 +166,17 @@ export const Regions = () => {
                   {testing ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin text-emerald-300" />
-                      Pinging {r.host}...
+                      {copy.pinging} {r.host}...
                     </>
                   ) : state?.phase === "done" ? (
                     <>
                       <RotateCcw className="h-4 w-4 text-emerald-300" />
-                      Test Ulang
+                      {copy.again}
                     </>
                   ) : (
                     <>
                       <Activity className="h-4 w-4 text-emerald-300" />
-                      Test Ping Live
+                      {copy.test}
                     </>
                   )}
                 </button>

@@ -1,8 +1,32 @@
 import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowRight, Gauge, MemoryStick, HardDrive, Cpu } from "lucide-react";
+import { useLang } from "./lang";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
+
+const COPY = {
+  en: {
+    subPre: "With",
+    ram: "3GB RAM",
+    storage: "20GB Storage",
+    subMid: "and",
+    cpu: "1.5 vCore",
+    subPost: "— free forever, no hidden fees.",
+    ctaPrimary: "Claim Free Server",
+    ctaSecondary: "View Pricing",
+  },
+  id: {
+    subPre: "Untuk Resource",
+    ram: "3GB Ram",
+    storage: "20GB Storage",
+    subMid: "dan",
+    cpu: "1.5vCore",
+    subPost: "— gratis selamanya, tanpa biaya tersembunyi.",
+    ctaPrimary: "Claim Server Gratis",
+    ctaSecondary: "Lihat Pricing",
+  },
+};
 
 const MaskedLine = ({ children, delay }: { children: React.ReactNode; delay: number }) => (
   <span className="block overflow-hidden pb-1">
@@ -126,6 +150,8 @@ export const Hero = () => {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "22%"]);
   const bgScale = useTransform(scrollYProgress, [0, 1], [1.08, 1.2]);
+  const { lang } = useLang();
+  const copy = COPY[lang];
 
   return (
     <section ref={ref} id="top" className="relative flex min-h-screen items-center overflow-hidden pt-16" data-testid="hero-section">
@@ -170,9 +196,9 @@ export const Hero = () => {
             className="mt-6 max-w-xl text-base text-slate-300 sm:text-lg"
             data-testid="hero-subline"
           >
-            Untuk Resource <span className="font-semibold text-white">3GB Ram</span>,{" "}
-            <span className="font-semibold text-white">20GB Storage</span> dan{" "}
-            <span className="font-semibold text-white">1.5vCore</span> — gratis selamanya, tanpa biaya tersembunyi.
+            {copy.subPre} <span className="font-semibold text-white">{copy.ram}</span>,{" "}
+            <span className="font-semibold text-white">{copy.storage}</span> {copy.subMid}{" "}
+            <span className="font-semibold text-white">{copy.cpu}</span> {copy.subPost}
           </motion.p>
 
           <motion.div
@@ -188,7 +214,7 @@ export const Hero = () => {
               data-testid="hero-dashboard-button"
               className="glow-cta group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 px-7 py-3.5 font-heading text-base font-bold text-emerald-950 transition-transform duration-300 hover:scale-[1.03] active:scale-[0.98]"
             >
-              Claim Server Gratis
+              {copy.ctaPrimary}
               <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
             </a>
             <a
@@ -196,7 +222,7 @@ export const Hero = () => {
               data-testid="hero-pricing-link"
               className="glass glass-hover inline-flex items-center rounded-full px-6 py-3.5 text-sm font-semibold text-white"
             >
-              Lihat Pricing
+              {copy.ctaSecondary}
             </a>
           </motion.div>
 
